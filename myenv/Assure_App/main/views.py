@@ -21,6 +21,9 @@ def home(request):
         
         #
         token = data.get('data', {}).get('token')
+        set_token(token)
+
+        
 
 
 
