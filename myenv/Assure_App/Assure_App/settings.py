@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -76,8 +77,12 @@ WSGI_APPLICATION = 'Assure_App.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.environ.get('DATABASE_ENGINE_PRADAR'),
+        'NAME': os.environ.get('DATABASE_NAME_PRADAR'),
+        'USER': os.environ.get('DATABASE_USER_PRADAR'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD_PRADAR'),
+        'PORT': 3306,
+        'HOST': '127.0.0.1',
     }
 }
 

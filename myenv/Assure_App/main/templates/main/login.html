@@ -20,6 +20,18 @@
               Login
         </button>
     </form>
+
+    <form action="{% url 'test' %}" method="post">
+        {% csrf_token %}
+
+        <button
+              class="btn btn-custom"
+              type="submit"
+              id="submit_button"
+            >
+              Test API!
+        </button>
+    </form>
     
 
 {% endblock %}

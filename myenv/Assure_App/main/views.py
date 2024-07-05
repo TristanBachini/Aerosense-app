@@ -23,14 +23,40 @@ def home(request):
         token = data.get('data', {}).get('token')
         set_token(token)
 
-        
+
+def test_api(request):
+    global token
+
+    url = "http://192.168.8.100/api/getIp"
+
+    payload = ""
+    headers = {
+    'Authorization': f'Bearer {token}',
+    'Content-Type': 'application/json;charset=UTF-8',
+    'Accept-Language': 'en'
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+
+    print(response.text)
+
+            
 
 
 
     return render(request,"main/login.html")
 
-def set_token(request, key):
+def set_token(key):
     
     #Set global token 
     global token 
     token = key
+
+
+def set_ip(address):
+
+    #match the API url used in web app
+    global ip_address
+    ip_address = address
+    
+
