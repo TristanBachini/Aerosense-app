@@ -22,9 +22,16 @@ def home(request):
         #
         token = data.get('data', {}).get('token')
         set_token(token)
+    
+    return render(request,"main/login.html")
 
 
 def test_api(request):
+    #Change this. Don't keep token as global variable.
+    #First try storing it in database as part of the
+    #user model. If successful, then lets do this.
+    #If unsuccessful, let's try storing using session storage.
+    
     global token
 
     url = "http://192.168.8.100/api/getIp"
