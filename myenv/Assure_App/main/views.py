@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
 import requests
 
 token = ''
@@ -6,22 +7,38 @@ ip_address = ''
 
 def home(request):
     
+    #logging in
     if(request.method == 'POST'):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-        url = "http://192.168.8.100/api/login"
+        user = authenticate(request, username=username, password=password)
 
-        payload = "{\r\n    \"username\":\"admin\",\r\n    \"password\":\"admin\"\r\n}"
-        headers = {
-        'Content-Type': 'application/json;charset=UTF-8'
-        }
+        if user is not None:
+            login(request, user)
 
-        response = requests.request("POST", url, headers=headers, data=payload)
+            #login success
+            url = "http://192.168.8.100/api/login"
 
-        data = response.json()
+            payload = "{\r\n    \"username\":\"admin\",\r\n    \"password\":\"admin\"\r\n}"
+            headers = {
+            'Content-Type': 'application/json;charset=UTF-8'
+            }
+
+            response = requests.request("POST", url, headers=headers, data=payload)
+
+            data = response.json()
+            
+            #
+            token = data.get('data', {}).get('token')
+            set_token(token)
+            return redirect('/')
         
-        #
-        token = data.get('data', {}).get('token')
-        set_token(token)
+        else:
+            print("Login Failed.")
+#            messages.error(request, "Incorrect password or username")
+        
+        
     
     return render(request,"main/login.html")
 
