@@ -43,6 +43,7 @@ def home(request):
     return render(request,"main/login.html")
 
 
+@login_required(login_url='/')
 def test_api(request):
     #Change this. Don't keep token as global variable.
     #First try storing it in database as part of the
@@ -70,13 +71,15 @@ def test_api(request):
 
     return render(request,"main/login.html")
 
+
+@login_required(login_url='/')
 def set_token(key):
     
     #Set global token 
     global token 
     token = key
 
-
+@login_required(login_url='/')
 def set_ip(address):
 
     #match the API url used in web app

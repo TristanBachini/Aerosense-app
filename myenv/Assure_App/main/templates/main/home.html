@@ -1,0 +1,17 @@
+{% extends 'main/template-1.html' %}
+{% block content %}
+
+    <form action="{% url 'test' %}" method="post">
+        {% csrf_token %}
+
+        <button
+              class="btn btn-custom"
+              type="submit"
+              id="submit_button"
+            >
+              Test API!
+        </button>
+    </form>
+    
+
+{% endblock %}
