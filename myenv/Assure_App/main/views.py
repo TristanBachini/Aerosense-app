@@ -1,16 +1,18 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 import requests
 
 token = ''
 ip_address = ''
 
-def home(request):
+def log_in(request):
     
     #logging in
     if(request.method == 'POST'):
         username = request.POST.get('username')
         password = request.POST.get('password')
+
 
         user = authenticate(request, username=username, password=password)
 
@@ -32,7 +34,7 @@ def home(request):
             #
             token = data.get('data', {}).get('token')
             set_token(token)
-            return redirect('/')
+            return redirect('/home')
         
         else:
             print("Login Failed.")
@@ -42,8 +44,11 @@ def home(request):
     
     return render(request,"main/login.html")
 
+@login_required(login_url='')
+def home(request):
+    return render(request,"main/home.html")
 
-@login_required(login_url='/')
+@login_required(login_url='')
 def test_api(request):
     #Change this. Don't keep token as global variable.
     #First try storing it in database as part of the
@@ -72,14 +77,14 @@ def test_api(request):
     return render(request,"main/login.html")
 
 
-@login_required(login_url='/')
+
 def set_token(key):
     
     #Set global token 
     global token 
     token = key
 
-@login_required(login_url='/')
+
 def set_ip(address):
 
     #match the API url used in web app
