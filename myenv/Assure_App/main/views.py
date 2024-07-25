@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from .models import Token
 import requests
 
 token = ''
@@ -32,8 +33,11 @@ def log_in(request):
             data = response.json()
             
             #
-            token = data.get('data', {}).get('token')
-            set_token(token)
+            key = data.get('data', {}).get('token')
+
+            Token.objects.update_or_create(user=request.user.id, token=key)
+
+
             return redirect('/home')
         
         else:
@@ -74,15 +78,8 @@ def test_api(request):
 
 
 
-    return render(request,"main/login.html")
+    return redirect('/home')
 
-
-
-def set_token(key):
-    
-    #Set global token 
-    global token 
-    token = key
 
 
 def set_ip(address):
